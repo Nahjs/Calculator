@@ -1,0 +1,5 @@
+D:/CLion/Caculator/cmake-build-debug/CMakeFiles/Caculator.dir
+D:/CLion/Caculator/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/CLion/Caculator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+D:/CLion/Caculator/cmake-build-debug/CMakeFiles/Caculator_autogen_timestamp_deps.dir
+D:/CLion/Caculator/cmake-build-debug/CMakeFiles/Caculator_autogen.dir
