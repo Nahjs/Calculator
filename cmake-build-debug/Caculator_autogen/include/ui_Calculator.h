@@ -11,9 +11,10 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -38,18 +39,20 @@ public:
     QPushButton *btn_sub;
     QPushButton *btn_multi;
     QPushButton *btn_div;
-    QLabel *label;
     QPushButton *btn_del;
     QPushButton *btn_clear;
     QPushButton *btn_mod;
     QPushButton *btn_leftBrackets;
     QPushButton *btn_rightBrackets;
+    QLineEdit *label;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout;
 
     void setupUi(QMainWindow *Calculator)
     {
         if (Calculator->objectName().isEmpty())
             Calculator->setObjectName("Calculator");
-        Calculator->resize(331, 510);
+        Calculator->resize(330, 510);
         centralwidget = new QWidget(Calculator);
         centralwidget->setObjectName("centralwidget");
         btn_7 = new QPushButton(centralwidget);
@@ -106,13 +109,6 @@ public:
         btn_div = new QPushButton(centralwidget);
         btn_div->setObjectName("btn_div");
         btn_div->setGeometry(QRect(240, 149, 61, 61));
-        label = new QLabel(centralwidget);
-        label->setObjectName("label");
-        label->setGeometry(QRect(30, 10, 271, 121));
-        QFont font1;
-        font1.setPointSize(9);
-        label->setFont(font1);
-        label->setFrameShape(QFrame::Panel);
         btn_del = new QPushButton(centralwidget);
         btn_del->setObjectName("btn_del");
         btn_del->setGeometry(QRect(100, 149, 61, 61));
@@ -128,6 +124,15 @@ public:
         btn_rightBrackets = new QPushButton(centralwidget);
         btn_rightBrackets->setObjectName("btn_rightBrackets");
         btn_rightBrackets->setGeometry(QRect(200, 150, 31, 61));
+        label = new QLineEdit(centralwidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(30, 10, 271, 121));
+        verticalLayoutWidget = new QWidget(centralwidget);
+        verticalLayoutWidget->setObjectName("verticalLayoutWidget");
+        verticalLayoutWidget->setGeometry(QRect(30, 10, 271, 121));
+        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout->setObjectName("verticalLayout");
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
         Calculator->setCentralWidget(centralwidget);
 
         retranslateUi(Calculator);
@@ -202,7 +207,6 @@ public:
 #if QT_CONFIG(shortcut)
         btn_div->setShortcut(QCoreApplication::translate("Calculator", "/", nullptr));
 #endif // QT_CONFIG(shortcut)
-        label->setText(QString());
         btn_del->setText(QCoreApplication::translate("Calculator", "\360\237\224\231", nullptr));
 #if QT_CONFIG(shortcut)
         btn_del->setShortcut(QCoreApplication::translate("Calculator", "Backspace", nullptr));

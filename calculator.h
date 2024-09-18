@@ -2,6 +2,7 @@
 #define CALCULATOR_H
 
 #include <QMainWindow>
+#include <QLineEdit>
 #include<QString>
 
 QT_BEGIN_NAMESPACE
@@ -15,7 +16,9 @@ class Calculator : public QMainWindow
     Q_OBJECT
 
 public:
+    // 构造函数
     Calculator(QWidget *parent = nullptr);
+    // 析构函数
     ~Calculator();
 
     //初始化按键字体和颜色
@@ -36,19 +39,24 @@ public:
     //转换为后缀表达式
     QString toRPN(QString str);
 
-    //运算
+    //做运算
     double operation(QString rpn);
 
 signals:
-    //显示在Label框中
+    //显示在QLineEdit框中
     void showLabel();
 
 private:
     Ui::Calculator *ui;
 
-    QString m_expression;//用户输入的式子
+    //用户输入的表达式
+    QString m_expression;
 
-    bool isValidBrackets(const QString &expression);
+    //检查括号是否匹配
+    bool areBracketsBalanced(const QString &expression);
+
+    //
+    QLineEdit *label;
 };
 
 #endif // CALCULATOR_H

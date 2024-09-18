@@ -1,5 +1,5 @@
-D:/CLion/Caculator/cmake-build-debug/Caculator_autogen/EWIEGA46WW/moc_calculator.cpp: D:/CLion/Caculator/calculator.h \
-  D:/CLion/Caculator/cmake-build-debug/Caculator_autogen/moc_predefs.h \
+D:/CLion/Calculator/cmake-build-debug/Caculator_autogen/EWIEGA46WW/moc_calculator.cpp: D:/CLion/Calculator/calculator.h \
+  D:/CLion/Calculator/cmake-build-debug/Caculator_autogen/moc_predefs.h \
   D:/QT/6.5.3/mingw_64/include/QtCore/QString \
   D:/QT/6.5.3/mingw_64/include/QtCore/q20memory.h \
   D:/QT/6.5.3/mingw_64/include/QtCore/q20type_traits.h \
@@ -104,6 +104,7 @@ D:/CLion/Caculator/cmake-build-debug/Caculator_autogen/EWIEGA46WW/moc_calculator
   D:/QT/6.5.3/mingw_64/include/QtCore/qtversionchecks.h \
   D:/QT/6.5.3/mingw_64/include/QtCore/qtypeinfo.h \
   D:/QT/6.5.3/mingw_64/include/QtCore/qtypes.h \
+  D:/QT/6.5.3/mingw_64/include/QtCore/qurl.h \
   D:/QT/6.5.3/mingw_64/include/QtCore/qutf8stringview.h \
   D:/QT/6.5.3/mingw_64/include/QtCore/qvariant.h \
   D:/QT/6.5.3/mingw_64/include/QtCore/qvarlengtharray.h \
@@ -122,19 +123,27 @@ D:/CLion/Caculator/cmake-build-debug/Caculator_autogen/EWIEGA46WW/moc_calculator
   D:/QT/6.5.3/mingw_64/include/QtGui/qkeysequence.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qpaintdevice.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qpalette.h \
+  D:/QT/6.5.3/mingw_64/include/QtGui/qpen.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qpixelformat.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qpixmap.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qpolygon.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qregion.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qrgb.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qrgba64.h \
+  D:/QT/6.5.3/mingw_64/include/QtGui/qtextcursor.h \
+  D:/QT/6.5.3/mingw_64/include/QtGui/qtextdocument.h \
+  D:/QT/6.5.3/mingw_64/include/QtGui/qtextformat.h \
+  D:/QT/6.5.3/mingw_64/include/QtGui/qtextoption.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qtgui-config.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qtguiexports.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qtguiglobal.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qtransform.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qwindowdefs.h \
   D:/QT/6.5.3/mingw_64/include/QtGui/qwindowdefs_win.h \
+  D:/QT/6.5.3/mingw_64/include/QtWidgets/QLineEdit \
   D:/QT/6.5.3/mingw_64/include/QtWidgets/QMainWindow \
+  D:/QT/6.5.3/mingw_64/include/QtWidgets/qframe.h \
+  D:/QT/6.5.3/mingw_64/include/QtWidgets/qlineedit.h \
   D:/QT/6.5.3/mingw_64/include/QtWidgets/qmainwindow.h \
   D:/QT/6.5.3/mingw_64/include/QtWidgets/qsizepolicy.h \
   D:/QT/6.5.3/mingw_64/include/QtWidgets/qtabwidget.h \

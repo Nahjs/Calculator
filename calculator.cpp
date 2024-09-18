@@ -1,5 +1,6 @@
 #include "calculator.h"
 #include "ui_Calculator.h"
+#include <QLineEdit>
 #include <QPushButton>
 #include<QStack>
 #include<QDebug>
@@ -7,14 +8,25 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
+// 构造函数
 Calculator::Calculator(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Calculator)
 {
     ui->setupUi(this);
 
-    //标题
+    //设置窗口标题
     this->setWindowTitle("计算器");
+
+    // 初始化 QLineEdit
+    label = new QLineEdit(this);
+    label->setReadOnly(true);
+    label->setAlignment(Qt::AlignRight);
+    label->setStyleSheet("font-size:20pt; background: transparent; border: none;");
+
+    // 将 QLineEdit 添加到布局中
+    ui->verticalLayout->addWidget(label);
+
 
     //设置表达式
     setExperssion();
@@ -23,12 +35,12 @@ Calculator::Calculator(QWidget *parent)
     //按键功能
     buttonFunction();
 
-    //在Label中显示表达式
-    connect(this,&Calculator::showLabel,ui->label,[=](){
-        ui->label->setText(m_expression);
+    // 在 QLineEdit 中显示表达式
+    connect(this, &Calculator::showLabel, this, [=]() {
+        label->setText(m_expression);
     });
 }
-
+//析构函数
 Calculator::~Calculator()
 {
     delete ui;
@@ -58,8 +70,6 @@ void Calculator::initButtonStyle()
     ui->btn_multi->setStyleSheet("font-size:20pt");
     ui->btn_div->setStyleSheet("font-size:20pt");
     ui->btn_result->setStyleSheet("font-size:20pt");
-    //显示框
-    ui->label->setStyleSheet("font-size:20pt");
 }
 
 
@@ -136,7 +146,7 @@ void Calculator::setExperssion() {
 }
 
 // 检查是否可以追加运算符
-    bool Calculator::canAppendOperator() {
+bool Calculator::canAppendOperator() {
         if (m_expression.isEmpty()) {
             return false;
         }
@@ -146,8 +156,8 @@ void Calculator::setExperssion() {
        lastChar == '*' || lastChar == '/' || lastChar == '%';
 }
 
-    // 替换最后一个运算符为新的运算符
-    void Calculator::replaceOperator(QChar newOperator) {
+// 替换最后一个运算符为新的运算符
+void Calculator::replaceOperator(QChar newOperator) {
         if (m_expression.length() >1 && (m_expression.back() == '+' || m_expression.back() == '-' ||
                                            m_expression.back() == '*' || m_expression.back() == '/' || m_expression.back() == '%')) {
             m_expression = m_expression.left(m_expression.length() - 1) + newOperator;
@@ -181,11 +191,11 @@ void Calculator::buttonFunction() {
 
     //等于键
     connect(ui->btn_result, &QPushButton::clicked, this, [=]() {
-        if (isValidBrackets(m_expression)) {//检查表达式中的括号是否匹配
-            ui->label->setNum(Calculator::operation(toRPN(m_expression)));
-        } else {
-            ui->label->setText("Error");
-        }
+        if (areBracketsBalanced(m_expression)) {//检查表达式中的括号是否匹配
+            label->setText(QString::number(Calculator::operation(toRPN(m_expression))));
+ } else {
+     label->setText("Error");
+ }
     });
 }
 
@@ -236,8 +246,11 @@ QString Calculator::toRPN(QString str)
 }
 
 //使用栈来检查括号匹配
-bool Calculator::isValidBrackets(const QString &expression) {
-    QStack<QChar> bracketStack;
+bool Calculator::areBracketsBalanced(const QString &expression) {
+
+    QStack<QChar> bracketStack;//用于存储左括号的栈
+
+    //用于定义匹配的括号对
     QMap<QChar, QChar> matchingBrackets = {
         {')', '('},
         {']', '['},
@@ -255,14 +268,15 @@ bool Calculator::isValidBrackets(const QString &expression) {
         }
     }
 
-    return bracketStack.isEmpty();
+    return bracketStack.isEmpty();//最终检查
 }
 
-//
+//计算后缀表达式的值
 double Calculator::operation(QString rpn)
 {
-    QStack<double> result;
-    QString num;
+    QStack<double> result;//用于存储操作数的栈
+    QString num;//用于构建多位数或小数
+
     //遍历后缀表达式
     for(auto i : rpn){
         if((i >= '0' && i <= '9') || i == '.' || i == ' '){
@@ -272,6 +286,8 @@ double Calculator::operation(QString rpn)
             if(i == ' '){
                 if(!num.isEmpty() && num.at(0) >= '0' && num.at(0) <= '9'){
                     result.push(num.toDouble());
+                    //当遇到空格时，表示一个完整的数字已经结束，
+                    //将 num 转换为 double 并压入栈中，然后清空 num 以便处理下一个数字或运算符。
                     num.clear();
                 }
             }
@@ -300,6 +316,7 @@ double Calculator::operation(QString rpn)
             double temp2 = result.pop();
             if (temp1 == 0) {
                 ui->label->setText("Error: Division by zero");
+                return 0; // Return an error value or handle it appropriately
             }
             result.push(temp2/temp1);
         }
