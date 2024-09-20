@@ -13,7 +13,7 @@ QT_END_NAMESPACE
 
 class Calculator : public QMainWindow
 {
-    Q_OBJECT
+    Q_OBJECT  //用 Q_OBJECT 宏来启用 Qt 的信号和槽机制
 
 public:
     // 构造函数
@@ -21,10 +21,10 @@ public:
     // 析构函数
     ~Calculator();
 
-    //初始化按键字体和颜色
-    void initButtonStyle();
+    //初始化按键字体
+    void initFont();
 
-    //将输入的数存入字符串
+    //将输入的数存入计算式
     void setExperssion();
 
     // 检查是否可以追加运算符
@@ -37,25 +37,26 @@ public:
     void buttonFunction();
 
     //转换为后缀表达式
-    QString toRPN(QString str);
+    QString toPostfixExpression(QString str);
 
     //做运算
     double operation(QString rpn);
 
-signals:
-    //显示在QLineEdit框中
+   //在QLineEdit框中显示计算式的信号
+    signals:
     void showLabel();
 
 private:
+    //ui 指针
     Ui::Calculator *ui;
 
-    //用户输入的表达式
-    QString m_expression;
+    //用户输入的计算式
+    QString expression;
 
     //检查括号是否匹配
     bool areBracketsBalanced(const QString &expression);
 
-    //
+    //计算式显示标签
     QLineEdit *label;
 };
 

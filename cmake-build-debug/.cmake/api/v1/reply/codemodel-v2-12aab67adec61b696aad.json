@@ -29,7 +29,7 @@
 					[
 						0
 					],
-					"name" : "Caculator",
+					"name" : "Calculator",
 					"targetIndexes" : 
 					[
 						0,
@@ -43,7 +43,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Caculator::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Caculator-Debug-ba27eb715343f432ccac.json",
+					"jsonFile" : "target-Caculator-Debug-681debbf2fa6a0958d4f.json",
 					"name" : "Caculator",
 					"projectIndex" : 0
 				},
