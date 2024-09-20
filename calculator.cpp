@@ -31,15 +31,16 @@ Calculator::Calculator(QWidget *parent)
     //设置表达式
     setExperssion();
     //初始化按键
-    initButtonStyle();
+    initFont();
     //按键功能
     buttonFunction();
 
     // 在 QLineEdit 中显示表达式
     connect(this, &Calculator::showLabel, this, [=]() {
-        label->setText(m_expression);
+        label->setText(expression);
     });
 }
+
 //析构函数
 Calculator::~Calculator()
 {
@@ -47,7 +48,7 @@ Calculator::~Calculator()
 }
 
 //初始化字体
-void Calculator::initButtonStyle()
+void Calculator::initFont()
 {
     ui->btn_0->setStyleSheet("font-size:20pt");
     ui->btn_1->setStyleSheet("font-size:20pt");
@@ -70,17 +71,18 @@ void Calculator::initButtonStyle()
     ui->btn_multi->setStyleSheet("font-size:20pt");
     ui->btn_div->setStyleSheet("font-size:20pt");
     ui->btn_result->setStyleSheet("font-size:20pt");
+    ui->label->setStyleSheet("font-size:20pt; color: red;");
 }
 
-
-//将按键存入表达式
+//将按键值存入表达式
 void Calculator::setExperssion() {
 
 
     // 数字按钮的点击事件
     auto appendDigit = [=](QChar digit) {
-        if (m_expression.isEmpty() || m_expression.back() != ')') {
-            m_expression += digit;
+        if (expression.isEmpty() || expression.back() != ')') {
+            expression += digit;
+            ui->label->clear(); // 清除错误信息
             emit showLabel();
         }
     };
@@ -99,18 +101,21 @@ void Calculator::setExperssion() {
 
     // 小数点按钮的点击事件
     connect(ui->btn_point, &QPushButton::clicked, this, [=](){
-        if (m_expression.isEmpty() || m_expression.back() == ')' || m_expression.back() == '.') {
-            return;
+        if (expression.isEmpty() || expression.back() == ')' || expression.back() == '('|| expression.back() == '.'
+            || expression.back() == '+'|| expression.back() == '-'|| expression.back() == '*'|| expression.back() == '/'|| expression.back() == '%') {
+            return;//封掉小数点键
         }
 
-        // 检查当前数字部分是否已经包含小数点
-        int lastOperatorIndex = m_expression.lastIndexOf(QRegularExpression("[+\\-*/%()]"));
-        QString currentNumber = m_expression.mid(lastOperatorIndex + 1);
+        // 查找最后一个运算符的位置
+        int lastOperatorIndex = expression.lastIndexOf(QRegularExpression("[+\\-*/%()]"));
+        //从最后一个运算符的位置开始，获取当前数字部分的子字符串
+        QString currentNumber = expression.mid(lastOperatorIndex + 1);
+        //检查当前数字部分是否已经包含小数点
         if (currentNumber.contains('.')) {
             return;
         }
 
-        m_expression += '.';
+        expression += '.';
         emit showLabel();
     });
 
@@ -130,27 +135,28 @@ void Calculator::setExperssion() {
 
     // 左括号按钮的点击事件
     connect(ui->btn_leftBrackets, &QPushButton::clicked, this, [=](){
-        if ( m_expression.isEmpty() ||m_expression.back() != ')') {
-            m_expression += '(';
+        if ( expression.isEmpty() || (!expression.back().isDigit() && expression.back() != '.' && expression.back() != ')')) {
+            expression += '(';
+            ui->label->clear(); // 清除错误信息
             emit showLabel();
         }
     });
 
     // 右括号按钮的点击事件
     connect(ui->btn_rightBrackets, &QPushButton::clicked, this, [=](){
-        if (!m_expression.isEmpty() && m_expression.back() != '(') {
-            m_expression += ')';
-            emit showLabel();
-        }
+        if (!expression.isEmpty() && expression.back() != '('&& expression.back() != '.') {
+             expression += ')';
+             emit showLabel();
+         }
     });
 }
 
 // 检查是否可以追加运算符
 bool Calculator::canAppendOperator() {
-        if (m_expression.isEmpty()) {
+        if (expression.isEmpty()) {
             return false;
         }
-        QChar lastChar = m_expression.back();
+        QChar lastChar = expression.back();
         // 如果最后一个字符是数字或右括号，可以追加运算符
     return lastChar.isDigit() || lastChar == ')' || lastChar == '+' || lastChar == '-' ||
        lastChar == '*' || lastChar == '/' || lastChar == '%';
@@ -158,11 +164,11 @@ bool Calculator::canAppendOperator() {
 
 // 替换最后一个运算符为新的运算符
 void Calculator::replaceOperator(QChar newOperator) {
-        if (m_expression.length() >1 && (m_expression.back() == '+' || m_expression.back() == '-' ||
-                                           m_expression.back() == '*' || m_expression.back() == '/' || m_expression.back() == '%')) {
-            m_expression = m_expression.left(m_expression.length() - 1) + newOperator;
+        if (expression.length() >1 && (expression.back() == '+' || expression.back() == '-' ||
+                                           expression.back() == '*' || expression.back() == '/' || expression.back() == '%')) {
+            expression = expression.left(expression.length() - 1) + newOperator;
                                            } else {
-                                               m_expression += newOperator;
+                                               expression += newOperator;
                                            }
         emit showLabel();
     }
@@ -171,15 +177,15 @@ void Calculator::replaceOperator(QChar newOperator) {
 void Calculator::buttonFunction() {
     //删除键
     connect(ui->btn_del, &QPushButton::clicked, this, [=]() {
-        if (!m_expression.isEmpty()) {
-            m_expression.chop(1); //删除字符串最后一位元素
+        if (!expression.isEmpty()) {
+            expression.chop(1); //删除字符串最后一位元素
         }
         emit showLabel();
     });
 
     //清空键（重新启用所有按键）
     connect(ui->btn_clear, &QPushButton::clicked, this, [=](){
-        m_expression.clear();
+        expression.clear();
         emit showLabel();
         ui->btn_add->setEnabled(true);
         ui->btn_sub->setEnabled(true);
@@ -191,8 +197,8 @@ void Calculator::buttonFunction() {
 
     //等于键
     connect(ui->btn_result, &QPushButton::clicked, this, [=]() {
-        if (areBracketsBalanced(m_expression)) {//检查表达式中的括号是否匹配
-            label->setText(QString::number(Calculator::operation(toRPN(m_expression))));
+        if (areBracketsBalanced(expression)) {//检查表达式中的括号是否匹配
+            label->setText(QString::number(Calculator::operation(toPostfixExpression(expression))));
  } else {
      label->setText("Error");
  }
@@ -200,15 +206,15 @@ void Calculator::buttonFunction() {
 }
 
 //转换为后缀表达式
-QString Calculator::toRPN(QString str)
+QString Calculator::toPostfixExpression(QString str)
 {
-    QString rpn;
-    QStack<QChar> opStack;//存操作符
+    QString s;//存储后缀表达式的字符串
+    QStack<QChar> opStack; //存操作符的栈
 
     for(auto i : str){
         //数字或小数点直接存入字符串
         if((i <= '9' && i >= '0') || i == '.'){
-            rpn += i;
+            s += i;
         }
         //左括号直接入栈
         if(i == '('){
@@ -217,32 +223,32 @@ QString Calculator::toRPN(QString str)
         //遇到右括号，出栈栈顶元素直到栈顶元素为左括号
         if(i == ')'){
             while(opStack.top() != '('){
-                rpn += ' ';
-                rpn += opStack.pop();
+                s += ' ';
+                s += opStack.pop();
             }
             opStack.pop();//将左括号出栈
         }
         //运算符优先级不低于栈顶元素则入栈，否则出栈栈顶元素后入栈
         if(i == '+'||i == '-'){
-            rpn += ' ';
+            s += ' ';
                 while(!opStack.empty() && opStack.top() != '(' && opStack.top() != '+' && opStack.top() != '-'){
-                    rpn += opStack.pop();
-                    rpn += ' ';
+                    s += opStack.pop();
+                    s += ' ';
                 }
                 opStack.push(i);
             }
         if(i == '*'||i == '/'||i == '%'){
-                rpn += ' ';
+                s += ' ';
                 opStack.push(i);
             }
     }
     //出栈所有元素
     while(!opStack.empty()){
-        rpn += ' ';
-        rpn += opStack.pop();
+        s += ' ';
+        s += opStack.pop();
     }
-    qDebug() << str << rpn;
-    return rpn;
+    qDebug() << str << s;
+    return s;
 }
 
 //使用栈来检查括号匹配
@@ -294,38 +300,62 @@ double Calculator::operation(QString rpn)
         }
         //加法
         if(i == '+'){
+            if(result.size() < 2) {
+                ui->label->setText("Error");
+                return 0;
+            }
             double temp1 = result.pop();
             double temp2 = result.pop();
             result.push(temp2+temp1);
         }
         //减法
         if(i == '-'){
+            if(result.size() < 2) {
+                ui->label->setText("Error");
+                return 0;
+            }
             double temp1 = result.pop();
             double temp2 = result.pop();
             result.push(temp2-temp1);
         }
         //乘法
         if(i == '*'){
+            if(result.size() < 2) {
+                ui->label->setText("Error");
+                return 0;
+            }
             double temp1 = result.pop();
             double temp2 = result.pop();
             result.push(temp2*temp1);
         }
         //除法
         if(i == '/'){
+            if(result.size() < 2) {
+                ui->label->setText("Error");
+                return 0;
+            }
             double temp1 = result.pop();
             double temp2 = result.pop();
             if (temp1 == 0) {
-                ui->label->setText("Error: Division by zero");
-                return 0; // Return an error value or handle it appropriately
+                ui->label->setText("Error");
             }
             result.push(temp2/temp1);
         }
         //模运算
         if(i == '%'){
+            if(result.size() < 2) {
+                ui->label->setText("Error");
+                return 0;
+            }
             double temp1 = result.pop();
             double temp2 = result.pop();
             result.push(fmod(temp2,temp1));
         }
+    }
+    // 检查是否有多余的操作符
+    if(result.size() != 1) {
+        label->setText("Error");
+        return 0;
     }
 
     return result.top();

@@ -205,7 +205,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=Caculator
+CMAKE_PROJECT_NAME:STATIC=Calculator
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=D:/QT/Tools/mingw1120_64/bin/ranlib.exe
@@ -298,6 +298,15 @@ Caculator_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 Caculator_SOURCE_DIR:STATIC=D:/CLion/Calculator
+
+//Value Computed by CMake
+Calculator_BINARY_DIR:STATIC=D:/CLion/Calculator/cmake-build-debug
+
+//Value Computed by CMake
+Calculator_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+Calculator_SOURCE_DIR:STATIC=D:/CLion/Calculator
 
 //Additional directories where find(Qt6 ...) host Qt components
 // are searched

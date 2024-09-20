@@ -142,7 +142,7 @@ public:
 
     void retranslateUi(QMainWindow *Calculator)
     {
-        Calculator->setWindowTitle(QCoreApplication::translate("Calculator", "Calculator", nullptr));
+        Calculator->setWindowTitle(QCoreApplication::translate("Calculator", "\350\256\241\347\256\227\345\231\250", nullptr));
         btn_7->setText(QCoreApplication::translate("Calculator", "7", nullptr));
 #if QT_CONFIG(shortcut)
         btn_7->setShortcut(QCoreApplication::translate("Calculator", "7", nullptr));
